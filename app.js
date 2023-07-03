@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const exphbs = require('express-handlebars')
 
 if(process.env.NODE_ENV !== 'production'){
   require('dotenv').config()
@@ -15,15 +16,14 @@ db.once('open' , ()=>{
   console.log('MongoDB Connecrted !')
 })
 
-
-
-
-
-
 const app = express()
+app.engine('hbs',exphbs({defaultLayout: 'main',extname:'.hbs'}))
+app.set('view engine' , 'hbs')
+
+
 
 app.get('/', (req,res)=>{
-  res.send('This is my URL shortener !')
+  res.render('index')
 })
 
 app.listen(3000,()=>{
