@@ -32,7 +32,7 @@ git clone https://github.com/mmm999xp/Url-Shortener
 ```
 2.進入專案資料夾，並建立.env檔案，並在其中輸入以下內容(<>中的內容請依取得的金鑰做替換)
 ```
-MONGODB_URI = mongodb+srv://<user_name>:<password>@cluster0.z4m2yov.mongodb.net/restaurant_list?retryWrites=true&w=majority
+MONGODB_URI = mongodb+srv://<user_name>:<password>@cluster0.z4m2yov.mongodb.net/URLshortener?retryWrites=true&w=majority
 ```
 3.終端機輸入以下指令安裝npm
 ```
