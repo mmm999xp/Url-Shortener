@@ -1,5 +1,18 @@
-<div class="response-link">
+<div class="response-link d-fiex flex-wrap">
   <h3>Success! Please use this link:</h3>
-  <a href="http://localhost:3000/shorturl/{{shortUrl}}">http://localhost:3000/shorturl/{{shortUrl}}</a>
-  <button>Copy</button>
+  <h4><a href="http://localhost:3000/shorturl/{{shortUrl}}" id="shortUrl">http://localhost:3000/shorturl/{{shortUrl}}</a></h4>
+  <button class="btn btn-primary w-50 mx-auto d-block mt-3" id="copy">Copy</button>
 </div>
+
+
+<script>
+  //copy功能
+  const button = document.querySelector('#copy')
+  const url = document.querySelector('#shortUrl').innerText
+
+  button.addEventListener('click',(event) => {
+    navigator.clipboard.writeText(url)
+    button.innerText = '√'
+    button.disabled = true
+  })
+</script>
