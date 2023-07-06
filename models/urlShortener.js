@@ -5,7 +5,7 @@ const urlShortenerSchema = new Schema({
     type:String,
     required: true
   },
-  shortUrl:{
+  shortUrlRandom:{
     type: String
   }
 })

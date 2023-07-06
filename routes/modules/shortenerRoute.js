@@ -15,29 +15,47 @@ router.post('/responseLink', (req, res) => {
   //若url最後一個字不是'/'，則新增'/'
   if (url[url.length - 1] !== '/') { url += '/' }
 
-  let shortUrl = myModules.getFiveRandomChar()
+  let shortUrlRandom = myModules.getFiveRandomChar()
   //如果短網址與原網址相同，則再度生成
-  while (url === ('http://localhost:3000/shorturl/' + shortUrl)) {
-    shortUrl = myModules.getFiveRandomChar()
+  while (url === ('http://localhost:3000/' + shortUrlRandom)) {
+    shortUrlRandom = myModules.getFiveRandomChar()
   }
 
-  //生成五位亂數短網址，重新導回responsepage網頁並利用query字串的方式讓responsepage也能獲取短網址變數
-  urlShortenerData.create({ url, shortUrl })
-    .then(() => res.redirect(`/responsepage?shortUrl=${shortUrl}`))
-    .catch(error => console.log(error))
+  //如果輸入已經存在資料庫的網址，則直接回傳資料庫中該網址的的五位亂數
+  urlShortenerData.findOne({ url: url })
+  .lean()
+  .then((data) => {
+    console.log(data)
+    //如果有資料，不必新增進資料庫，重新導回responsepage網頁並利用query字串的方式讓responsepage也能獲取短網址變數
+    if(data){
+      //url = data.url
+      res.redirect(`/responsepage?shortUrl=${data.shortUrlRandom}`)
+    } else {
+      //如果找不到資料生成五位亂數短網址，重新導回responsepage網頁並利用query字串的方式讓responsepage也能獲取短網址變數
+      urlShortenerData.create({ url, shortUrlRandom })
+        .then(() => res.redirect(`/responsepage?shortUrl=${shortUrlRandom}`))
+        .catch(error => console.log(error))
+    }
+  })
+  .catch(error => console.log(error))
+ 
+
+
+  
 
 })
 
 router.get('/responsepage', (req, res) => {
-  const shortUrl = req.query.shortUrl
-  res.render('responsepage', { shortUrl })
+  const shortUrlRandom = req.query.shortUrl
+  res.render('responsepage', { shortUrlRandom })
 })
 
-router.get('/shorturl/:shortUrl', (req, res) => {
-  const shortUrl = req.params.shortUrl
-  urlShortenerData.find({ shortUrl: shortUrl })
+router.get('/:shortUrlRandom', (req, res) => {
+  const shortUrlRandom = req.params.shortUrlRandom
+  urlShortenerData.find({ shortUrlRandom: shortUrlRandom })
     .lean()
     .then(data => res.redirect(`${data[0].url}`))
+    .catch(error => console.log(error))
 })
 
 
